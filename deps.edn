@@ -5,6 +5,8 @@
           :exec-fn main}
   :day02 {:ns-default aoc-2024.day02
           :exec-fn main}
+  :day03 {:ns-default aoc-2024.day03
+          :exec-fn main}
   :build {:deps {io.github.clojure/tools.build
                  {:mvn/version "0.10.5"}}
           :ns-default build}
