@@ -2,6 +2,8 @@
   (:require
    [clojure.string :as str]))
 
+(def directions '([-1 0] [-1 1] [0 1] [1 1] [1 0] [1 -1] [0 -1] [-1 -1]))
+
 (defn into-map [acc [k v]] (assoc acc k v))
 
 (defn grid->map [g]
@@ -11,33 +13,23 @@
        (apply concat)
        (reduce into-map {})))
 
-(def directions '([-1 0] [-1 1] [0 1] [1 1] [1 0] [1 -1] [0 -1] [-1 -1]))
-
 (defn add-vec [[x1 y1] [x2 y2]] [(+ x1 x2) (+ y1 y2)])
 
-(defn get-pos [pos dir idx] (add-vec pos (map #(* idx %) dir)))
+(defn get-pos [pos dir idx] (add-vec pos (map (partial * idx) dir)))
 
-(defn xmas-in-direction? [pos dir grid]
-  (let [x-pos (get-pos pos dir 0)
-        m-pos (get-pos pos dir 1)
-        a-pos (get-pos pos dir 2)
-        s-pos (get-pos pos dir 3)]
-    (and (= \X (grid x-pos))
-         (= \M (grid m-pos))
-         (= \A (grid a-pos))
-         (= \S (grid s-pos)))))
+(defn xmas-in-direction? [grid pos dir]
+  (let [dirs (map (partial get-pos pos dir) (range 4))]
+    (= [\X \M \A \S] (map grid dirs))))
 
-(defn reducer [pos grid acc dir]
-  (if (xmas-in-direction? pos dir grid) (+ 1 acc) acc))
 
 (defn count-xmas-for [grid [pos l]]
   (if (= \X l)
-    (reduce (partial reducer pos grid) 0 directions)
+    (count (filter (partial xmas-in-direction? grid pos) directions))
     0))
 
-(defn count-all-xmas [grid]
-  (reduce + (map (partial count-xmas-for grid) grid)))
+(defn part-1 [grid]
+  (reduce + (map partial (partial count-xmas-for grid) grid)))
 
 (defn main [_]
   (let [grid (map seq (str/split-lines (slurp "inputs/day04.txt")))]
-    (println (count-all-xmas (grid->map grid)))))
+    (println (part-1 (grid->map grid)))))
