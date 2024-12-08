@@ -4,9 +4,7 @@
 
 (def directions '([-1 0] [-1 1] [0 1] [1 1] [1 0] [1 -1] [0 -1] [-1 -1]))
 
-(defn add-vec [[x1 y1] [x2 y2]] [(+ x1 x2) (+ y1 y2)])
-
-(defn get-pos [pos dir idx] (add-vec pos (map (partial * idx) dir)))
+(defn get-pos [pos dir idx] (lib/add-vec pos (map (partial * idx) dir)))
 
 (defn xmas-in-direction? [grid pos dir]
   (let [dirs (map (partial get-pos pos dir) (range 4))]

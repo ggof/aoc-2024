@@ -25,9 +25,7 @@
        count))
 
 (defn drop-nth [n coll]
-  (concat
-   (take n coll)
-   (drop (inc n) coll)))
+  (concat (take n coll) (drop (inc n) coll)))
 
 (defn any-permutation-safe? [nbs]
   (let [permutations (for [i (range (count nbs))] (drop-nth i nbs))]
