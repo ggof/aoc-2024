@@ -7,10 +7,15 @@
           :exec-fn main}
   :day03 {:ns-default aoc-2024.day03
           :exec-fn main}
+  :day04 {:ns-default aoc-2024.day04
+          :exec-fn main}
+  :day05 {:ns-default aoc-2024.day05
+          :exec-fn main}
   :build {:deps {io.github.clojure/tools.build
                  {:mvn/version "0.10.5"}}
           :ns-default build}
   :test {:extra-paths ["test"]
+         :main-opts ["-m" "cognitect.test-runner"]
+         :exec-fn cognitect.test-runner.api/test
          :extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
-                      io.github.cognitect-labs/test-runner
-                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}}}}
+                      io.github.cognitect-labs/test-runner {:git/tag "v0.5.1" :git/sha "dfb30dd"}}}}}
