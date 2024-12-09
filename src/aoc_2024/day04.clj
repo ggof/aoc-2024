@@ -18,9 +18,31 @@
 (defn part-1 [input]
   (->> input
        lib/string->grid
-       lib/grid->map)
-  #(reduce + (map partial (partial count-xmas-for %) %)))
+       lib/grid->map
+       (#(reduce + (map (partial count-xmas-for %) %)))))
+
+(defn is-xmas? [grid pos]
+  (let [l (map grid (map (partial lib/add-vec pos) [[-1 -1] [-1 1]]))
+        r (map grid (map (partial lib/add-vec pos) [[1 -1] [1 1]]))
+        t (map grid (map (partial lib/add-vec pos) [[-1 -1] [1 -1]]))
+        b (map grid (map (partial lib/add-vec pos) [[-1 1] [1 1]]))]
+    (or
+     (and (= l [\M \M]) (= r [\S \S]))
+     (and (= r [\M \M]) (= l [\S \S]))
+     (and (= b [\M \M]) (= t [\S \S]))
+     (and (= t [\M \M]) (= b [\S \S])))))
+
+(defn is-cross? [grid [pos l]]
+  (and (= \A l) (is-xmas? grid pos)))
+
+(defn part-2 [input]
+  (->> input
+       lib/string->grid
+       lib/grid->map
+       (#(filter (partial is-cross? %) %))
+       count))
 
 (defn main [_]
   (let [input (slurp "inputs/day04.txt")]
-    (println (part-1 input))))
+    (println (part-1 input))
+    (println (part-2 input))))
