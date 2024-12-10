@@ -10,30 +10,19 @@
            vs (map grid ks)
            ps (filter (comp not nil?) (zipmap ks vs))]
        (if (= 9 v)
-         1
-         (reduce
-          +
-          (for [[pp pv] ps]
-            (if (= pv (inc v)) (count-paths grid pp) 0))))))))
+         [pos]
+         (apply
+          concat
+          (for [[pp pv] ps :when (= pv (inc v))]
+            (count-paths grid pp))))))))
 
 (defn parse [input]
   (-> input lib/string->grid lib/grid->map (update-vals #(Character/digit % 10))))
 
 (defn part-1 [input]
   (let [grid (parse input)
-        starts (filter #(= 0 (grid (first %))) grid)
-        scores (map (fn [[k]] [k (count-paths grid k)]) starts)]
-    (println scores)
-    (reduce + (map second scores))))
-
-(def input "89010123
-78121874
-87430965
-96549874
-45678903
-32019012
-01329801
-10456732")
+        starts (filter #(= 0 (grid (first %))) grid)]
+    (transduce (comp (map first) (map (partial count-paths grid)) (map set) (map count)) + starts)))
 
 (defn main [_]
-  (println (part-1 input)))
+  (println (part-1 (slurp "inputs/day10.txt"))))
