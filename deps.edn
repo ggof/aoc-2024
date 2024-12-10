@@ -1,18 +1,13 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.12.0"}}
  :aliases
- {:day01 {:ns-default aoc-2024.day01
-          :exec-fn main}
-  :day02 {:ns-default aoc-2024.day02
-          :exec-fn main}
-  :day03 {:ns-default aoc-2024.day03
-          :exec-fn main}
-  :day04 {:ns-default aoc-2024.day04
-          :exec-fn main}
-  :day05 {:ns-default aoc-2024.day05
-          :exec-fn main}
-  :day06 {:ns-default aoc-2024.day06
-          :exec-fn main}
+ {:day01 {:ns-default aoc-2024.day01 :exec-fn main}
+  :day02 {:ns-default aoc-2024.day02 :exec-fn main}
+  :day03 {:ns-default aoc-2024.day03 :exec-fn main}
+  :day04 {:ns-default aoc-2024.day04 :exec-fn main}
+  :day05 {:ns-default aoc-2024.day05 :exec-fn main}
+  :day06 {:ns-default aoc-2024.day06 :exec-fn main}
+  :day07 {:ns-default aoc-2024.day07 :exec-fn main}
   :build {:deps {io.github.clojure/tools.build
                  {:mvn/version "0.10.5"}}
           :ns-default build}
