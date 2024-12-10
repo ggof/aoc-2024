@@ -2,16 +2,12 @@
   (:require
    [clojure.string :as str]))
 
-(defn check-calibration [target acc [hd & tl]]
+(defn check-calibration [ops target acc [hd & tl]]
   (if (empty? tl)
-    (or
-     (= target (+ acc hd))
-     (= target (* acc hd)))
-    (or
-     (check-calibration target (+ acc hd) tl)
-     (check-calibration target (* acc hd) tl))))
+    (some #(= target (% acc hd)) ops)
+    (some #(check-calibration ops target (% acc hd) tl) ops)))
 
-(defn is-good-calibration? [[target xs]] (check-calibration target 0 xs))
+(defn is-good-calibration? [ops [target xs]] (check-calibration ops target 0 xs))
 
 (defn parse-line [line]
   (let [[target xs] (str/split line #": ")
@@ -22,7 +18,14 @@
   (map parse-line (str/split-lines input)))
 
 (defn part-1 [input]
-  (transduce (comp (filter is-good-calibration?) (map first)) + (parse input)))
+  (transduce (comp (filter (partial is-good-calibration? [+ *])) (map first)) + (parse input)))
+
+(defn cc [a b] (parse-long (str a b)))
+
+(defn part-2 [input]
+  (transduce (comp (filter (partial is-good-calibration? [+ * cc])) (map first)) + (parse input)))
 
 (defn main [_]
-  (println (part-1 (slurp "inputs/day07.txt"))))
+  (let [input  (slurp "inputs/day07.txt")]
+    (println (part-1 input))
+    (println (part-2 input))))
