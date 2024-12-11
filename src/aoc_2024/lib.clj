@@ -11,4 +11,5 @@
        (into {})))
 
 (defn add-vec [[x1 y1] [x2 y2]] [(+ x1 x2) (+ y1 y2)])
+(defn sub-vec [[x1 y1] [x2 y2]] [(- x1 x2) (- y1 y2)])
 
