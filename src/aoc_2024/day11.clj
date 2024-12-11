@@ -20,11 +20,25 @@
       nextstone
       (rule-3 stone))))
 
+(def for-stone
+  (memoize
+   (fn [stone n]
+     (if (= 0 n)
+       1
+       (if (= 0 stone)
+         (for-stone 1 (dec n))
+         (let [strstone (str stone)
+               is-even? (even? (count strstone))
+               half-len (/ (count strstone) 2)]
+           (if is-even?
+             (+ (for-stone (parse-long (str/join (take half-len strstone))) (dec n))
+                (for-stone (parse-long (str/join (drop half-len strstone))) (dec n)))
+             (for-stone (* 2024 stone) (dec n)))))))))
+
 (defn stones-after [stones blinks]
   (loop [stones stones
          blinks blinks]
-    (println "blink" blinks)
-    (println "we have" (count stones) "stones")
+    (println "blinks left:" blinks "we have" (count stones) "stones")
     (if
      (= 0 blinks)
       (count stones)
@@ -35,6 +49,11 @@
       (#(map parse-long %))
       (stones-after 25)))
 
+(defn part-2 [input]
+  (let [input  (map parse-long (str/split input #" "))]
+    (transduce (map #(for-stone % 25)) + input)))
+
 (defn main [_]
   (let [input (slurp "inputs/day11.txt")]
-    (println (part-1 input))))
+    (println (part-2 input))))
+    ; (println (part-2 input))))
