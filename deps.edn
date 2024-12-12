@@ -8,6 +8,7 @@
   :day05 {:ns-default aoc-2024.day05 :exec-fn main}
   :day06 {:ns-default aoc-2024.day06 :exec-fn main}
   :day07 {:ns-default aoc-2024.day07 :exec-fn main}
+  :day08 {:ns-default aoc-2024.day08 :exec-fn main}
   :day10 {:ns-default aoc-2024.day10 :exec-fn main}
   :day11 {:ns-default aoc-2024.day11 :exec-fn main}
   :build {:deps {io.github.clojure/tools.build
