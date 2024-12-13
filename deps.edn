@@ -11,6 +11,7 @@
   :day08 {:ns-default aoc-2024.day08 :exec-fn main}
   :day10 {:ns-default aoc-2024.day10 :exec-fn main}
   :day11 {:ns-default aoc-2024.day11 :exec-fn main}
+  :day13 {:ns-default aoc-2024.day13 :exec-fn main}
   :build {:deps {io.github.clojure/tools.build
                  {:mvn/version "0.10.5"}}
           :ns-default build}
