@@ -5,7 +5,7 @@
 
 (defn bfs
   [graph s e]
-  (loop [queue   [[0 s]]
+  (loop [queue   [[1 s]]
          visited #{}]
     (let [[c n]       (first queue)
           neighbors   (graph n)
@@ -18,11 +18,12 @@
         (visited n) (recur (rest queue) visited)
         :else (recur new-queue (conj visited n))))))
 
-(defn in-grid? [size [x y]]
-  (and (< x size) (< y size) (>= x 0) (>= y 0)))
+(defn in-grid? [size [x y]] (and (< x size) (< y size) (>= x 0) (>= y 0)))
+
+(defn in-grid-and-not-wall? [size walls] (every-pred (partial in-grid? size) (complement walls)))
 
 (defn surroundings [size pos walls]
-  (set (filter (every-pred (partial in-grid? size) (complement walls)) (map (partial lib/add-vec pos) [[-1 0] [0 -1] [1 0] [0 1]]))))
+  (set (filter (in-grid-and-not-wall? size walls) (map (partial lib/add-vec pos) [[-1 0] [0 -1] [1 0] [0 1]]))))
 
 (defn create-grid [size walls]
   (into {} (for [y (range size)
@@ -33,30 +34,24 @@
 (defn parse [input]
   (map #(map parse-long %) (map #(str/split % #",") (str/split-lines input))))
 
-(defn part-1 [input]
-  (let [walls (into #{} (take 1024 (parse input)))
-        grid (create-grid 71 walls)]
-    (bfs grid [0 0] [70 70])))
+(defn grid-with-walls [walls nb] (create-grid 71 (set (take nb walls))))
 
-(def min-nb 1025)
-(def max-nb 3450)
+(defn part-1 [input] (bfs (grid-with-walls (parse input) 1024) [0 0] [70 70]))
 
-(defn half-dist [a b]
-  (int (/ (- a b) 2)))
+(defn half-dist [a b] (long (/ (- a b) 2)))
 
-(defn part-2 [input]
-  (let [all-walls (parse input)]
-    (loop [last-safe min-nb
-           nb max-nb]
-      (let [walls (into #{} (take nb all-walls))
-            grid (create-grid 71 walls)]
-        (if (nil? (bfs grid [0 0] [70 70]))
-          (if (not (nil? (bfs (create-grid 71 (into #{} (take (dec nb) all-walls))) [0 0] [70 70])))
-            (nth all-walls (dec nb))
-            (recur last-safe (- nb (half-dist nb last-safe))))
-          (if (nil? (bfs (create-grid 71 (into #{} (take (inc nb) all-walls))) [0 0] [70 70]))
-            (nth  all-walls nb)
-            (recur nb (+ nb (half-dist nb last-safe)))))))))
+(defn binary-search [all-walls btm top]
+  (loop [last-safe btm
+         nb top]
+    (if (nil? (bfs (grid-with-walls all-walls nb) [0 0] [70 70]))
+      (if (not (nil? (bfs (grid-with-walls all-walls (dec nb)) [0 0] [70 70])))
+        (nth all-walls (dec nb))
+        (recur last-safe (- nb (half-dist nb last-safe))))
+      (if (nil? (bfs (grid-with-walls all-walls (inc nb)) [0 0] [70 70]))
+        (nth  all-walls nb)
+        (recur nb (+ nb (half-dist nb last-safe)))))))
+
+(defn part-2 [input] (binary-search (parse input) 1025 3450))
 
 (defn main [_]
   (let [input (slurp "inputs/day18.txt")]
