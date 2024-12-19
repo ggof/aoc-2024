@@ -2,12 +2,20 @@
   (:require
    [clojure.string :as str]))
 
+(defn get-next-queue [pattern towels q]
+  (transduce
+   (comp (filter (partial str/starts-with? pattern)) (map #(subs pattern (count %))))
+   (completing #(cons %2 %1))
+   (rest q)
+   towels))
+
 (defn can-obtain? [towels pattern]
-  (if (empty? pattern)
-    true
-    (->> towels
-         (filter (partial str/starts-with? pattern))
-         (some #(can-obtain? towels (subs pattern (count %)))))))
+  (loop [q [pattern]]
+    (let [pattern (first q)]
+      (cond
+        (empty? q) false
+        (empty? pattern) true
+        :else (recur (get-next-queue pattern towels q))))))
 
 (defn parse [input]
   (let [[towels patterns] (str/split input #"\n\n")
