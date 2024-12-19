@@ -6,28 +6,43 @@
   (nth [0 1 2 3 (:a state) (:b state) (:c state)] operand))
 
 (defn bxl [state operand]
-  (assoc state :pc (inc (:pc state)) :b (bit-xor (:b state) operand)))
+  (assoc state
+         :pc (inc (:pc state))
+         :b (bit-xor (:b state) operand)))
 
 (defn bst [state operand]
-  (assoc state :pc (inc (:pc state)) :b (bit-and (combo state operand) 7)))
+  (assoc state 
+         :pc (inc (:pc state)) 
+         :b (bit-and (combo state operand) 7)))
 
 (defn jnz [state operand]
-  (assoc state :pc (if (= 0 (:a state)) (inc (:pc state)) (long (/ operand 2)))))
+  (assoc state 
+         :pc (if (= 0 (:a state)) (inc (:pc state)) (long (/ operand 2)))))
 
 (defn bxc [state _]
-  (assoc state :pc (inc (:pc state)) :b (bit-xor (:b state) (:c state))))
+  (assoc state 
+         :pc (inc (:pc state)) 
+         :b (bit-xor (:b state) (:c state))))
 
 (defn out [state operand]
-  (assoc state :pc (inc (:pc state)) :out (conj (:out state) (bit-and (combo state operand) 7))))
+  (assoc state 
+         :pc (inc (:pc state)) 
+         :out (conj (:out state) (bit-and (combo state operand) 7))))
 
 (defn adv [state operand]
-  (assoc state :pc (inc (:pc state)) :a (long (/ (:a state) (bit-shift-left 1 (combo state operand))))))
+  (assoc state 
+         :pc (inc (:pc state)) 
+         :a (long (/ (:a state) (bit-shift-left 1 (combo state operand))))))
 
 (defn bdv [state operand]
-  (assoc state :pc (inc (:pc state)) :b (long (/ (:a state) (bit-shift-left 1 (combo state operand))))))
+  (assoc state 
+         :pc (inc (:pc state)) 
+         :b (long (/ (:a state) (bit-shift-left 1 (combo state operand))))))
 
 (defn cdv [state operand]
-  (assoc state :pc (inc (:pc state)) :c (long (/ (:a state) (bit-shift-left 1 (combo state operand))))))
+  (assoc state 
+         :pc (inc (:pc state)) 
+         :c (long (/ (:a state) (bit-shift-left 1 (combo state operand))))))
 
 (defn parse [input]
   (let [[a b c & program] (map parse-long (re-seq #"\d+" input))]
