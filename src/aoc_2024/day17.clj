@@ -3,14 +3,7 @@
    [clojure.string :as str]))
 
 (defn combo [state operand]
-  (cond
-    (= 0 operand) 0
-    (= 1 operand) 1
-    (= 2 operand) 2
-    (= 3 operand) 3
-    (= 4 operand) (state :a)
-    (= 5 operand) (state :b)
-    (= 6 operand) (state :c)))
+  (nth [0 1 2 3 (:a state) (:b state) (:c state)] operand))
 
 (defn bxl [state operand]
   (assoc state :pc (inc (:pc state)) :b (bit-xor (:b state) operand)))
