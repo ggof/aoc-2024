@@ -1,7 +1,5 @@
 (ns aoc-2024.day18
-  (:require
-   [aoc-2024.lib :as lib]
-   [clojure.string :as str]))
+  (:require [clojure.string :as str]))
 
 (defn bfs
   [graph s e]
@@ -23,7 +21,7 @@
 (defn in-grid-and-not-wall? [size walls] (every-pred (partial in-grid? size) (complement walls)))
 
 (defn surroundings [size pos walls]
-  (set (filter (in-grid-and-not-wall? size walls) (map (partial lib/add-vec pos) [[-1 0] [0 -1] [1 0] [0 1]]))))
+  (set (filter (in-grid-and-not-wall? size walls) (map (partial mapv + pos) [[-1 0] [0 -1] [1 0] [0 1]]))))
 
 (defn create-grid [size walls]
   (into {} (for [y (range size)

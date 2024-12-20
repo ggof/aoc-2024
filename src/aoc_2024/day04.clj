@@ -4,7 +4,7 @@
 
 (def directions '([-1 0] [-1 1] [0 1] [1 1] [1 0] [1 -1] [0 -1] [-1 -1]))
 
-(defn get-pos [pos dir idx] (lib/add-vec pos (map (partial * idx) dir)))
+(defn get-pos [pos dir idx] (mapv + pos (map (partial * idx) dir)))
 
 (defn xmas-in-direction? [grid pos dir]
   (let [dirs (map (partial get-pos pos dir) (range 4))]
@@ -22,10 +22,10 @@
        (#(reduce + (map (partial count-xmas-for %) %)))))
 
 (defn is-xmas? [grid pos]
-  (let [l (map grid (map (partial lib/add-vec pos) [[-1 -1] [-1 1]]))
-        r (map grid (map (partial lib/add-vec pos) [[1 -1] [1 1]]))
-        t (map grid (map (partial lib/add-vec pos) [[-1 -1] [1 -1]]))
-        b (map grid (map (partial lib/add-vec pos) [[-1 1] [1 1]]))]
+  (let [l (map grid (map (partial mapv + pos) [[-1 -1] [-1 1]]))
+        r (map grid (map (partial mapv + pos) [[1 -1] [1 1]]))
+        t (map grid (map (partial mapv + pos) [[-1 -1] [1 -1]]))
+        b (map grid (map (partial mapv + pos) [[-1 1] [1 1]]))]
     (or
      (and (= l [\M \M]) (= r [\S \S]))
      (and (= r [\M \M]) (= l [\S \S]))

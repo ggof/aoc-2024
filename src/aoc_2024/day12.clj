@@ -1,6 +1,5 @@
 (ns aoc-2024.day12
   (:require
-   [aoc-2024.lib :as lib]
    [clojure.set :as set]))
 
 (def max-x 50)
@@ -10,7 +9,7 @@
 
 (defn find-whole-area [m p a]
   (let [v (m p)
-        surroundings (map (partial lib/add-vec) [[0 -1] [0 1] [-1 0] [1 0]])
+        surroundings (map (partial mapv +) [[0 -1] [0 1] [-1 0] [1 0]])
         pos-to-add (filter (every-pred in-bounds? #(= v (m %))) surroundings)
         next-a (set/union a p)]
 

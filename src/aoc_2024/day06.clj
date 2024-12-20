@@ -12,13 +12,13 @@
   (loop [pos (find-start grid)
          dir [0 -1]
          vis #{pos}]
-    (let [npos (lib/add-vec pos dir)]
+    (let [npos (mapv + pos dir)]
       (case (grid npos)
         nil (conj vis pos)
         \^ (recur npos dir (conj vis pos))
         \. (recur npos dir (conj vis pos))
         \# (let [ndir (next-dir dir)]
-             (recur (lib/add-vec pos ndir) ndir (conj vis pos)))))))
+             (recur (mapv + pos ndir) ndir (conj vis pos)))))))
 
 (defn part-1 [input]
   (->> input

@@ -1,6 +1,4 @@
-(ns aoc-2024.day08
-  (:require
-   [aoc-2024.lib :as lib]))
+(ns aoc-2024.day08)
 
 (def max-x 50)
 (def max-y 50)
@@ -8,10 +6,10 @@
 (defn in-bounds? [[x y]] (and (<= 0 x) (< x max-x) (<= 0 y) (< y max-y)))
 
 (defn get-first-antinodes [c a]
-  (let [c-a (lib/sub-vec c a)
-        a-c (lib/sub-vec a c)
-        p1 (lib/add-vec c c-a)
-        p2 (lib/add-vec a a-c)]
+  (let [c-a (mapv + c a)
+        a-c (mapv + a c)
+        p1 (mapv + c c-a)
+        p2 (mapv + a a-c)]
     (filter in-bounds? [p1 p2])))
 
 (defn antinodes-for [get-antinodes pos antennas nodes]
@@ -38,12 +36,12 @@
   (loop [acc []
          pos p]
     (if (in-bounds? pos)
-      (recur (conj acc pos) (lib/add-vec pos d))
+      (recur (conj acc pos) (mapv + pos d))
       acc)))
 
 (defn get-all-antinodes [c a]
-  (let [c-a (lib/sub-vec c a)
-        a-c (lib/sub-vec a c)]
+  (let [c-a (mapv - c a)
+        a-c (mapv - a c)]
     (concat (in-direction c a-c) (in-direction a c-a))))
 
 (defn part-2 [input]

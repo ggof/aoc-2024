@@ -6,7 +6,7 @@
   (memoize
    (fn [grid pos]
      (let [v (grid pos)
-           ks (map (partial lib/add-vec pos) [[0 -1] [1 0] [0 1] [-1 0]])
+           ks (map (partial mapv + pos) [[0 -1] [1 0] [0 1] [-1 0]])
            vs (map grid ks)
            ps (filter (comp not nil?) (zipmap ks vs))]
        (if (= 9 v)
@@ -18,7 +18,7 @@
 
 (defn count-paths [grid pos]
   (let [v (grid pos)
-        ks (map (partial lib/add-vec pos) [[0 -1] [1 0] [0 1] [-1 0]])
+        ks (map (partial mapv + pos) [[0 -1] [1 0] [0 1] [-1 0]])
         vs (map grid ks)
         ps (filter (comp not nil?) (zipmap ks vs))]
     (if (= 9 v)
